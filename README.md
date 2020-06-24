@@ -382,3 +382,31 @@ Value types (passed by value)
 - structs
 
 In general, compared with JS and Python the value types are similair except structs (objects).
+
+### Maps
+
+Map type in GO is special type of "object". It is key/value structure where all keys are of same type as well as all values need to be of same type. So we have two sets of types.
+
+Declaring variable of map type can be done in 3 ways. See map/main.go
+
+```go
+// declare colors map
+colors := map[string]string{
+  "red":   "#ff000",
+  "green": "#4bf745",
+  "blue":  "#ef45fgf",
+ }
+
+```
+
+To delete key in the map use `delete`.
+
+```go
+//delete key
+delete(colors3, 10)
+
+```
+
+In general, maps are good for related properties (keys of same type, values of same type). Map items can be added and extended (with struct this is not possible).
+
+### Interfaces
