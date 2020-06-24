@@ -253,3 +253,132 @@ Go has builtin test suite. The test files should have name *_test.go.
 The function names should have Test at the beginning of the func name and original func name integrated.
 Each test function gets a test handler as first parameter of test fn.
 To run test use `go test` command.
+
+```go
+func checkDeckLength(d deck) (ok bool, err string) {
+  length := 16
+  if len(d) != length {
+    message := fmt.Sprintf("Expected deck length of %d but got %v", length, len(d))
+    // t.Errorf()
+    return false, message
+  }
+  return true, ""
+}
+
+func TestNewDeck(t *testing.T) {
+  d := newDeck()
+
+  ok, err := checkDeckLength(d)
+
+  if ok == false {
+    t.Errorf(err)
+  }
+  firstCard := "Ace of Spades"
+  if d[0] != firstCard {
+    t.Errorf("Expected first card to be %v but got %v", firstCard, d[0])
+  }
+  lastCard := "Four of Carot"
+  if d[len(d)-1] != lastCard {
+    t.Errorf("Expected last cart to be %v but got %v", lastCard, d[len(d)-1])
+  }
+}
+```
+
+## Data structures in Go
+
+### Struct
+
+Go uses `struct` as data more complex data structure. Object/Dictionary is equviavalent to struct in Go.
+
+Struct can be defined in multiple ways (by position an by key)
+
+```go
+
+type person struct {
+ id        string
+ firstName string
+ lastName  string
+ // birthDate struct time.Date
+}
+
+// define struct by position
+alex := person{"1234", "Dusan", "Mijatovic"}
+// define position by key
+alex := person{id:"1234", firstName: "Dusan", lastName: "Mijatovic"}
+// declaring empty struct
+// it will have default values
+// string = "", int = 0, float = 0, bool = false
+var marco person
+
+// print all key value pairs in struct (object)
+ fmt.Printf("%+v", marco)
+
+// assign value to struct
+marco.firstName = "myFirstNameValue"
+
+```
+
+### Embeding structures
+
+We can combine struct objects and inherit/embed in order to make more complex structure.
+
+```go
+
+type person struct {
+  id        string
+  firstName string
+  lastName  string
+  contact   contactInfo
+  // can be done like this
+  // to have same name
+  contactInfo
+}
+
+type contactInfo struct {
+  email   string
+  phone   string
+  address string
+}
+
+```
+
+### Changing struct values
+
+Go passes parameters into func by value not by reference. This means that function by default is not able to change the value in struct or other type by default. To achieve this behaviour one must create pointer and pass the pointer to object.
+
+```go
+// create pointer to object
+// give us memory access to
+// this object
+ marcoPointer := &marco
+ // pass the pointer
+ marcoPointer.updateName("Marcius")
+
+```
+
+### Pointers in Go
+
+Two commands are used for working with pointers `&` and `*`. This two signs work in conjuction. First & is used to get memory address (pointer) and second *is used to extract.
+In the function signiture we also* to indicated that function requires pointer to specific variable, not the variable (value).
+
+Note! If the function signiture requires pointer to variable Go will automatically convert variable to pointer to memory without errors.
+
+Not all parameters are passed by value. Slice for example is passed by refference. The array in GO look more to touples in Python because they cannot be changed. Slice is extended structure of array.
+
+Refference types, which cannot be passed by value because the type value is reference
+
+- slice: is refrence type.
+- map:
+- channels:
+- pointers:
+- functions: these can be also passed as parameters to another function
+
+Value types (passed by value)
+
+- int
+- float
+- string,
+- bool
+- structs
+
+In general, compared with JS and Python the value types are similair except structs (objects).
