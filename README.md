@@ -199,3 +199,57 @@ func deal(d deck, handSize int) (deck, deck){
 }
 
 ```
+
+### Writing data to file
+
+Writing to file is done by `ioutil` [common Go package](https://golang.org/pkg/io/ioutil/#pkg-overview)
+
+- Convert string to byte slice (writing data)
+
+For writing data to a file, go has function WriteFile. This function writes bytes slice to disk.
+
+```go
+// example conveting string to byte slice
+func (d deck) saveToFile(fileName string) error {
+  bytes := []byte(d.toString())
+  err := ioutil.WriteFile(fileName, bytes, 0644)
+  if err != nil {
+    log.Fatal(err)
+    return err
+  } else {
+    return nil
+  }
+}
+```
+
+Reading data from the file
+
+```go
+func loadDeckFromFile(fileName string) (deck, error) {
+  // read bytes from file
+  bs, err := ioutil.ReadFile(fileName)
+  if err != nil {
+    log.Fatal(err)
+    return newDeck(), err
+  }
+  //converts bytes to string
+  tekst := string(bs)
+  // split to array
+  array := strings.Split(tekst, ";")
+  // create deck
+  cards := deck(array)
+  // return cards
+  return cards, nil
+}
+```
+
+### Randomising
+
+Go uses seed when randomizing values. This is order to be able to repeat randomizing for replication.
+
+## Testing with go
+
+Go has builtin test suite. The test files should have name *_test.go.
+The function names should have Test at the beginning of the func name and original func name integrated.
+Each test function gets a test handler as first parameter of test fn.
+To run test use `go test` command.
