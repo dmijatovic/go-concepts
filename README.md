@@ -448,3 +448,84 @@ Conceptually, interfaces help prevent code duplication for similair types/struct
 Goog example is Response type of http. It implements Reader interface. Each type/structure can implement this interface to `standardize` input/output (data communication). Then on the flip side we have Writer interface. So here you have Reader and Writer interface enabling i/o for every app that implements these interfaces and fullfills the contract.
 
 ## Concurrency (channels & routines)
+
+### Go rutine & channels
+
+To achieve non-blocking code we call method with keywoard `go`. The Go schedular will then create new `thread` (child routine) and will proceed with main thread. If PC has one core the tasks will be scheduled but only one be executed at a time. So concurrency enables us to shedule task and execute them without blocking. Concurrency is not parallelism. For parallelism multiple cores are required to be able to run multiple tasks on each core.
+
+Main routine of the program can spawn unlimited (?) amount of child Go routines. However main routine is handled differently. To prevent main routine of exiting main thread prematurely we create channel that monitors when child routines are done.
+
+`Channels` are used to communicate between main routine and child routines we created using `go` keywoard. The channel is created as any other variable. The channels are typed, the info shared between routines need to be of same type. So each channel should be created per variable type.
+
+The channel variable need to be passed to each function called by child routine.
+
+### Sending data through channels
+
+The communication is two-way. We can input values into channel or extract from the channel.
+
+```go
+// send value into a channel
+channel <- 5
+// input message from channel into variable
+myVar <- channel
+// input chennel message into a method directly
+fmt.Printl(<-channel)
+```
+
+There is no automatic way for main thread to keep a number of spawned child threads. If the programm is not taking care of listening to channels and waiting for feedback the communication will be broken. So if you spawning child routines using keywoard 'go' in an loop, you will need to run similair loop to collect responses from thec channels. Simple example below
+
+```go
+func checkURL(url string, ch chan string) {
+
+ _, err := http.Get(url)
+
+ if err != nil {
+  // println("Site down on GET", url)
+  ch <- fmt.Sprintf("Site is down on GET...%v", url)
+ } else {
+  // println("Active...", url)
+  ch <- fmt.Sprintf("Active...%v", url)
+ }
+}
+
+func main() {
+ println("It works")
+
+ sites := []string{
+  "http://google.com",
+  "http://microsoft.com",
+  "http://facebook.com",
+ }
+
+ //create new string channel
+ ch := make(chan string)
+
+ // issue task to child routines
+ for _, url := range sites {
+  go checkURL(url, ch)
+ }
+ // geather responses
+ // note! this loop is executing one itteraction
+ // on each response. Waiting on message from channel
+ // is blocking call
+ for i := 0; i < len(sites); i++ {
+  // this will wait for response
+  // from the channel
+  fmt.Println(<-ch)
+ }
+}
+```
+
+Alternative loop for waining for channel feedback.
+
+```go
+//create new string channel
+ch := make(chan string)
+
+// waiting for channel to respond
+for l := range ch {
+  go checkURL(l, ch)
+}
+```
+
+When you want to pause child routines, the sleep commands need to be in the child routines.
