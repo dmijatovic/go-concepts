@@ -410,3 +410,41 @@ delete(colors3, 10)
 In general, maps are good for related properties (keys of same type, values of same type). Map items can be added and extended (with struct this is not possible).
 
 ### Interfaces
+
+Interface defines methods that have same name (but specific implementation) in other types/structures. The interface is `imaginary` type, you cannot define values/props on it, you just inherit from concrete types like map, struct, string etc.
+
+Interfaces are implicit, all structures that satisfy interface (requirements) are included. Sometimes it is difficult spotting all types included.
+
+```go
+// declare interface
+// for struct method we want to use
+// these are specific per stuct
+type bot interface {
+  // all struct having this
+  // func implemented
+  getGreeting() string
+}
+
+type englishBot struct{}
+type spanishBot struct{}
+
+func (englishBot) getGreeting() string {
+  return "Hi there"
+}
+
+func (spanishBot) getGreeting() string {
+  return "Hola!"
+}
+// define method that can use bot interface
+// All structs having method getGreeting implemented
+// can use this interface method
+func printGreeting(b bot) {
+  fmt.Println(b.getGreeting())
+}
+```
+
+Conceptually, interfaces help prevent code duplication for similair types/structures used. Interface can reffer to another interface. Struct type can use prop that points to an interface (?), see http.Response struct for body. This gives more freedom to object because any struct can be implemented as long as it fullfills the requirements of the interface.
+
+Goog example is Response type of http. It implements Reader interface. Each type/structure can implement this interface to `standardize` input/output (data communication). Then on the flip side we have Writer interface. So here you have Reader and Writer interface enabling i/o for every app that implements these interfaces and fullfills the contract.
+
+## Concurrency (channels & routines)
