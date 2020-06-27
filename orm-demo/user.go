@@ -1,22 +1,29 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite3"
 )
 
-func allUsers(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "All users endpoint")
+// User model for ORM
+type User struct {
+	gorm.Model
+	Roles     string `json:roles`
+	FirstName string `json: first_name`
+	LastName  string `json: last_name`
+	Email     string `json: email`
+	password  string
+	BirthDate string `json:birth_date`
 }
 
-func newUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "newUser endpoint")
-}
+func initMigration() {
+	db, err := gorm.Open("sqlite3", "test.db")
+	if err != nil {
+		panic("Failed to connect to db")
+	}
+	// close database
+	defer db.Close()
 
-func deleteUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "deleteUser endpoint")
-}
-
-func updateUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "updateUser endpoint")
+	//create table
+	db.AutoMigrate(User{})
 }
