@@ -88,6 +88,10 @@ func main(){
 
 ```
 
+### Private vs Public variables and functions
+
+The variables, properties, methods and function starting using `camelCase are PRIVATE and when starting with capital/PascalCase are PUBLIC`. Remember this is typical for Golang!!!
+
 ### Variables
 
 Basic variable types in Go are:
@@ -529,3 +533,9 @@ for l := range ch {
 ```
 
 When you want to pause child routines, the sleep commands need to be in the child routines.
+
+## Modules in Go
+
+The app can have multiple (local) modules. Each of the module should have its package name. See go-oauth2-api for use of modules. You do import local modules into main.go package and file.
+
+Each module needs to have main.go file. The package name should be same as folder/module name (I guess)
