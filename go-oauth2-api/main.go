@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"./api"
+	"./pgdb"
 )
 
 func onAppClose(done chan bool) {
@@ -27,7 +28,7 @@ func main() {
 	done := make(chan bool, 1)
 
 	// connect to database
-	myDb := pgdb.Connect()
+	myDB := pgdb.Connect()
 
 	// start https server
 	go api.HandleRequests()
@@ -35,11 +36,14 @@ func main() {
 	//listen to close
 	go onAppClose(done)
 
+	// pgdb.AllUsers(nil)
+
+	//
 	// wait for appCloseEvent
 	<-done
 	//close db
-	if myDb != nil {
-		db.Close(myDb)
+	if myDB != nil {
+		pgdb.Close(myDB)
 	}
 	log.Println("Closing oauth2 server")
 }

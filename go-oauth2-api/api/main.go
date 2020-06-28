@@ -31,7 +31,7 @@ func startServer(router *mux.Router) {
 	log.Fatal(err)
 }
 
-// HandleRequests will start http server
+// HandleRequests will define routes and start http server
 func HandleRequests() {
 	router := mux.NewRouter().StrictSlash(true)
 

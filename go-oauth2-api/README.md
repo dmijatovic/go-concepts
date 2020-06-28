@@ -25,4 +25,4 @@ sqlx is a library which provides a set of extensions on go's standard database/s
 This is [basic postgres driver for go](https://pkg.go.dev/mod/github.com/lib/pq).
 After lookin around I decided to use this driver only.
 
-At this moment there are lot of different packages without
+At this moment there are lot of different packages. The basic use of go database package and [pq driver is demonstrated in this youtube video](https://youtube.com/watch?v=tOBosuiJIHM)
