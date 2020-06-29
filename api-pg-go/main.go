@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	host := "localhost:3000"
+	host := "localhost:8080"
 	log.Println("Starting...", host)
 	// create new router
 	mux := routes.Register()

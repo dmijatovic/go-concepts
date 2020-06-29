@@ -13,7 +13,7 @@ type User struct {
 	FirstName  string    `pg:"first_name, notnull" json:"first_name"`
 	LastName   string    `pg:"last_name, notnull" json:"last_name"`
 	Email      string    `pg:"email, pk, unique" json:"email"`
-	password   string    `pg:"password, notnull"`
+	Password   string    `pg:"password, notnull" json:"-"`
 	BirthDate  string    `pg:"birth_date, null" json:"birth_date"`
 	CreateDate time.Time `pg:"createdate, notnull, default: CURRENT_DATE" json:"createdate"`
 }
@@ -36,7 +36,7 @@ func GetAllUsers() ([]User, error) {
 		//load from db
 		err := rows.Scan(&user.ID, &user.Roles,
 			&user.FirstName, &user.LastName, &user.Email,
-			&user.password, &user.BirthDate, &user.CreateDate)
+			&user.Password, &user.BirthDate, &user.CreateDate)
 		//check for error
 		if err != nil {
 			return nil, err
@@ -49,4 +49,19 @@ func GetAllUsers() ([]User, error) {
 		return nil, err
 	}
 	return users, nil
+}
+
+// AddNewUser to postgres database. On success returns
+// user unique id generate by postgres
+func AddNewUser(user User) (uid string, e error) {
+	var id string
+
+	err := pgdb.DB.QueryRow(`INSERT INTO users (roles,first_name, last_name,email,password,birth_date)
+	VALUES ($1,$2,$3,$4,$5,$6)
+	RETURNING id createdate;`, user.Roles, user.FirstName, user.LastName, user.Email, user.Password, user.BirthDate).Scan(&id)
+
+	if err != nil {
+		return "", err
+	}
+	return id, nil
 }
