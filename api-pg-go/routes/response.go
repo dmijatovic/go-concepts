@@ -1,4 +1,4 @@
-package model
+package routes
 
 import (
 	"encoding/json"
@@ -16,8 +16,8 @@ type ServerStatus struct {
 // NOTE! json tags with "" and without spaces
 type Response struct {
 	ServerStatus
-	// interface makes it possible
-	// to send any format
+	// empty interface makes it possible
+	// to send any data format
 	Payload interface{} `json:"payload"`
 }
 
