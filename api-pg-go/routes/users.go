@@ -34,30 +34,20 @@ func handleUsers(res http.ResponseWriter, req *http.Request) {
 		data.StatusText = "Method not supported"
 		data.Payload = "Method not supported"
 		//return bad request
-		json.NewEncoder(res).Encode(data)
+		data.ReturnResponse(res)
 	}
-
-	// res.Write([]byte("This is users route"))
 }
 
 func getAllUsers(res http.ResponseWriter) {
 	var data model.Response
 	users, err := model.GetAllUsers()
 	if err != nil {
-		log.Println("getAllUsers: ", err)
-		// data.Status = http.StatusInternalServerError
-		// data.StatusText = "Internal server error"
-		// data.Payload = err.Error()
 		data = model.SetErrorResponse(err, model.ServerStatus{})
 	} else {
-		// data.Status = http.StatusOK
-		// data.StatusText = "OK"
-		// data.Payload = users
 		data = model.SetOKResponse(users)
 	}
-	//write json header
-	jsonHeader(res)
-	json.NewEncoder(res).Encode(data)
+	//write reponse
+	data.ReturnResponse(res)
 }
 
 func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (model.User, error) {
@@ -67,13 +57,11 @@ func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (model.User,
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
 		log.Println("getUserFromReqBody: ", err)
-
-		data.Status = http.StatusBadRequest
-		data.StatusText = "Failed to extract data from request.Body"
-		data.Payload = err.Error()
-
-		// return error
-		json.NewEncoder(res).Encode(data)
+		data = model.SetErrorResponse(err, model.ServerStatus{
+			Status:     http.StatusBadRequest,
+			StatusText: "Failed to extract data from request.Body",
+		})
+		data.ReturnResponse(res)
 		//exit
 		return user, err
 	}
@@ -100,23 +88,32 @@ func addNewUser(req *http.Request, res http.ResponseWriter) {
 		user.ID = id
 		data = model.SetOKResponse(user)
 	}
-
-	json.NewEncoder(res).Encode(data)
+	//write reponse
+	data.ReturnResponse(res)
 }
 
 func updateUser(req *http.Request, res http.ResponseWriter) {
 	var data model.Response
 
 	// extract user from body
-	user, err := getUserFromReqBody(req, res)
+	u, err := getUserFromReqBody(req, res)
 	if err != nil {
 		//exit on error
 		return
 	}
 
-	data = model.SetOKResponse(user)
+	user, err := model.UpdateUser(u)
+	if err != nil {
+		data = model.SetErrorResponse(err, model.ServerStatus{
+			Status:     http.StatusBadRequest,
+			StatusText: "Failed to update user",
+		})
+	} else {
+		data = model.SetOKResponse(user)
+	}
 
-	json.NewEncoder(res).Encode(data)
+	//write reponse
+	data.ReturnResponse(res)
 }
 
 func deleteUser(req *http.Request, res http.ResponseWriter) {
@@ -139,5 +136,6 @@ func deleteUser(req *http.Request, res http.ResponseWriter) {
 		data = model.SetOKResponse(user)
 	}
 
-	json.NewEncoder(res).Encode(data)
+	//write reponse
+	data.ReturnResponse(res)
 }

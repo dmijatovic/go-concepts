@@ -1,6 +1,7 @@
 package model
 
 import (
+	"log"
 	"time"
 
 	"../pgdb"
@@ -23,6 +24,7 @@ func GetAllUsers() ([]User, error) {
 	rows, err := pgdb.DB.Query("SELECT * FROM users;")
 	// check for errors
 	if err != nil {
+		log.Println("GetAllUsers...", err)
 		return nil, err
 	}
 	//close at the end
@@ -39,13 +41,14 @@ func GetAllUsers() ([]User, error) {
 			&user.Password, &user.BirthDate, &user.CreateDate)
 		//check for error
 		if err != nil {
+			log.Println("GetAllUsers...", err)
 			return nil, err
 		}
 		users = append(users, user)
 	}
 	//check for rows error
 	if err := rows.Err(); err != nil {
-		// log.Println(err)
+		log.Println("GetAllUsers...", err)
 		return nil, err
 	}
 	return users, nil
@@ -61,6 +64,7 @@ func AddNewUser(user User) (uid string, e error) {
 	RETURNING id createdate;`, user.Roles, user.FirstName, user.LastName, user.Email, user.Password, user.BirthDate).Scan(&id)
 
 	if err != nil {
+		log.Println("AddNewUser...", err)
 		return "", err
 	}
 	return id, nil
@@ -74,8 +78,30 @@ func DeleteUserByID(uid string) (User, error) {
 	RETURNING id, roles, first_name, last_name, email, password, birth_date, createdate;`, uid).Scan(&user.ID, &user.Roles, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.BirthDate, &user.CreateDate)
 
 	if err != nil {
+		log.Println("DeleteUserByID...", err)
 		return user, err
 	}
 
+	return user, nil
+}
+
+// UpdateUser in postgres database. On success returns
+// updated user structure
+func UpdateUser(u User) (User, error) {
+	var user User
+
+	err := pgdb.DB.QueryRow(`
+	UPDATE users
+		SET roles=$2,
+			first_name=$3,
+			last_name=$4,
+			birth_date=$5
+	WHERE id = $1
+	RETURNING id, roles, first_name, last_name, email, password, birth_date, createdate;`, u.ID, u.Roles, u.FirstName, u.LastName, u.BirthDate).Scan(&user.ID, &user.Roles, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.BirthDate, &user.CreateDate)
+
+	if err != nil {
+		log.Println("UpdateUser...", err)
+		return user, err
+	}
 	return user, nil
 }

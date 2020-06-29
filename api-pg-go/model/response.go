@@ -1,6 +1,9 @@
 package model
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 // ServerStatus is send as part of api response
 // this is quite similair how axios responds
@@ -44,4 +47,19 @@ func SetOKResponse(data interface{}) Response {
 	r.Payload = data
 
 	return r
+}
+
+// ReturnResponse will return response to api consumer
+// including the status code
+// NOTE! When setting header values, this need to be
+// done before setting status using WriteHeader!!!
+func (r *Response) ReturnResponse(rw http.ResponseWriter) {
+	// set content-type
+	rw.Header().Add("content-type", "application/json")
+	rw.Header().Add("x-server", "dv4all-basic-go-http-server")
+	// SET ALL HEADER PROPS BEFORE setting state
+	// NOTE! GO requirement
+	rw.WriteHeader(r.Status)
+	// log.Println(rw)
+	json.NewEncoder(rw).Encode(r)
 }
