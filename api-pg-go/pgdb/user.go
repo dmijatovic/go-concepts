@@ -1,10 +1,8 @@
-package model
+package pgdb
 
 import (
 	"log"
 	"time"
-
-	"../pgdb"
 )
 
 // User structure
@@ -21,7 +19,7 @@ type User struct {
 
 // GetAllUsers will extract all users from users table
 func GetAllUsers() ([]User, error) {
-	rows, err := pgdb.DB.Query("SELECT * FROM users;")
+	rows, err := sqlDB.Query("SELECT * FROM users;")
 	// check for errors
 	if err != nil {
 		log.Println("GetAllUsers...", err)
@@ -59,7 +57,7 @@ func GetAllUsers() ([]User, error) {
 func AddNewUser(user User) (uid string, e error) {
 	var id string
 
-	err := pgdb.DB.QueryRow(`INSERT INTO users (roles,first_name, last_name,email,password,birth_date)
+	err := sqlDB.QueryRow(`INSERT INTO users (roles,first_name, last_name,email,password,birth_date)
 	VALUES ($1,$2,$3,$4,$5,$6)
 	RETURNING id createdate;`, user.Roles, user.FirstName, user.LastName, user.Email, user.Password, user.BirthDate).Scan(&id)
 
@@ -74,7 +72,7 @@ func AddNewUser(user User) (uid string, e error) {
 func DeleteUserByID(uid string) (User, error) {
 	var user User
 
-	err := pgdb.DB.QueryRow(`DELETE FROM users WHERE id=$1 
+	err := sqlDB.QueryRow(`DELETE FROM users WHERE id=$1 
 	RETURNING id, roles, first_name, last_name, email, password, birth_date, createdate;`, uid).Scan(&user.ID, &user.Roles, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.BirthDate, &user.CreateDate)
 
 	if err != nil {
@@ -90,7 +88,7 @@ func DeleteUserByID(uid string) (User, error) {
 func UpdateUser(u User) (User, error) {
 	var user User
 
-	err := pgdb.DB.QueryRow(`
+	err := sqlDB.QueryRow(`
 	UPDATE users
 		SET roles=$2,
 			first_name=$3,

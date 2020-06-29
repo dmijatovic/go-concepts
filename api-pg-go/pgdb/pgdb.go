@@ -18,7 +18,7 @@ type Settings struct {
 	Dbname   string
 }
 
-var DB *sql.DB
+var sqlDB *sql.DB
 
 // ConnectionStr creates postgres connection string
 func ConnectionStr(conf Settings) string {
@@ -41,7 +41,7 @@ func Connect(cnnStr string) *sql.DB {
 	}
 	log.Println("Connection validated...")
 	//save here in the module
-	DB = db
+	sqlDB = db
 	//return db refrence too
 	return db
 }

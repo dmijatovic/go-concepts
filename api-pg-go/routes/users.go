@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"../model"
+	"../pgdb"
 )
 
 func users() http.HandlerFunc {
@@ -40,7 +40,7 @@ func handleUsers(res http.ResponseWriter, req *http.Request) {
 
 func getAllUsers(res http.ResponseWriter) {
 	var data Response
-	users, err := model.GetAllUsers()
+	users, err := pgdb.GetAllUsers()
 	if err != nil {
 		data = SetErrorResponse(err, ServerStatus{})
 	} else {
@@ -50,9 +50,9 @@ func getAllUsers(res http.ResponseWriter) {
 	data.ReturnResponse(res)
 }
 
-func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (model.User, error) {
+func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (pgdb.User, error) {
 	var data Response
-	var user model.User
+	var user pgdb.User
 	//extract data from request body
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
@@ -77,7 +77,7 @@ func addNewUser(req *http.Request, res http.ResponseWriter) {
 		return
 	}
 	// call insert statement
-	id, err := model.AddNewUser(user)
+	id, err := pgdb.AddNewUser(user)
 	// check if insert failed
 	if err != nil {
 		data = SetErrorResponse(err, ServerStatus{
@@ -102,7 +102,7 @@ func updateUser(req *http.Request, res http.ResponseWriter) {
 		return
 	}
 
-	user, err := model.UpdateUser(u)
+	user, err := pgdb.UpdateUser(u)
 	if err != nil {
 		data = SetErrorResponse(err, ServerStatus{
 			Status:     http.StatusBadRequest,
@@ -125,9 +125,8 @@ func deleteUser(req *http.Request, res http.ResponseWriter) {
 		//exit on error
 		return
 	}
-	user, err := model.DeleteUserByID(u.ID)
+	user, err := pgdb.DeleteUserByID(u.ID)
 	if err != nil {
-		res.WriteHeader(http.StatusBadRequest)
 		data = SetErrorResponse(err, ServerStatus{
 			Status:     http.StatusBadRequest,
 			StatusText: "Failed to delete user",
