@@ -72,7 +72,7 @@ func AddNewUser(user User) (uid string, e error) {
 func DeleteUserByID(uid string) (User, error) {
 	var user User
 
-	err := sqlDB.QueryRow(`DELETE FROM users WHERE id=$1 
+	err := sqlDB.QueryRow(`DELETE FROM users WHERE id=$1
 	RETURNING id, roles, first_name, last_name, email, password, birth_date, createdate;`, uid).Scan(&user.ID, &user.Roles, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.BirthDate, &user.CreateDate)
 
 	if err != nil {
