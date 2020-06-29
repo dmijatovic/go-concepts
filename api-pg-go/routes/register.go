@@ -11,6 +11,7 @@ func Register() *http.ServeMux {
 	mux.Handle("/", http.FileServer(http.Dir("./views/")))
 	mux.HandleFunc("/demo", demo())
 	mux.HandleFunc("/users", handleUsers)
+	mux.HandleFunc("/login", handleLogin)
 
 	return mux
 }

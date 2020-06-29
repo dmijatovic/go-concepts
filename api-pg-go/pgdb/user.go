@@ -103,3 +103,14 @@ func UpdateUser(u User) (User, error) {
 	}
 	return user, nil
 }
+
+// GetUserByEmail will return user from database based on email
+func GetUserByEmail(email string) (User, error) {
+	var user User
+	err := sqlDB.QueryRow(`SELECT * FROM users WHERE email=$1 LIMIT 1;`, email).Scan(&user.ID, &user.Roles, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.BirthDate, &user.CreateDate)
+	if err != nil {
+		log.Println("GetUserByEmail...", err)
+		return user, err
+	}
+	return user, nil
+}
