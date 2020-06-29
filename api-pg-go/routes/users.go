@@ -123,13 +123,21 @@ func deleteUser(req *http.Request, res http.ResponseWriter) {
 	var data model.Response
 
 	// extract user from body
-	user, err := getUserFromReqBody(req, res)
+	u, err := getUserFromReqBody(req, res)
 	if err != nil {
 		//exit on error
 		return
 	}
-
-	data = model.SetOKResponse(user)
+	user, err := model.DeleteUserByID(u.ID)
+	if err != nil {
+		res.WriteHeader(http.StatusBadRequest)
+		data = model.SetErrorResponse(err, model.ServerStatus{
+			Status:     http.StatusBadRequest,
+			StatusText: "Failed to delete user",
+		})
+	} else {
+		data = model.SetOKResponse(user)
+	}
 
 	json.NewEncoder(res).Encode(data)
 }

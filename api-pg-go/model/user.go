@@ -65,3 +65,17 @@ func AddNewUser(user User) (uid string, e error) {
 	}
 	return id, nil
 }
+
+// DeleteUserByID will delete user from database by unique id and return delete user object.
+func DeleteUserByID(uid string) (User, error) {
+	var user User
+
+	err := pgdb.DB.QueryRow(`DELETE FROM users WHERE id=$1 
+	RETURNING id, roles, first_name, last_name, email, password, birth_date, createdate;`, uid).Scan(&user.ID, &user.Roles, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.BirthDate, &user.CreateDate)
+
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
