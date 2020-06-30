@@ -50,9 +50,9 @@ func getAllUsers(res http.ResponseWriter) {
 	data.ReturnResponse(res)
 }
 
-func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (pgdb.InputUser, error) {
+func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (pgdb.InUser, error) {
 	var data Response
-	var user pgdb.InputUser
+	var user pgdb.InUser
 	//extract data from request body
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {

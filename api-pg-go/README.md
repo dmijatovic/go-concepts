@@ -13,9 +13,10 @@ The intention is to create simple api with less as possible dependencies, so we 
 
 There are some ideas about MVC structure but I am inclined using a custom structure:
 
-- hash: module resposible for hashing the passwords. bcrypt is used.
+- password: module resposible for hashing the passwords. bcrypt is used.
 - pgdb: module responsible for postgres database connection and models
 - routes module: container routes and calls appropriate method in models
+- token: module for signing and verifying JWT.
 - views: static index.html page for root of the api
 
 ## Dependencies
@@ -27,6 +28,8 @@ This modules need to be installed if you do not have them already
 go get github.com/lib/pq
 # bcrypt
 go get golang.org/x/crypto/bcrypt
+# jwt-go
+go get github.com/dgrijalva/jwt-go
 
 ```
 

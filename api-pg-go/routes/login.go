@@ -2,19 +2,23 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
 
 	"../password"
 	"../pgdb"
+	"../token"
 )
 
 // LoginCredentials of user
 type LoginCredentials struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type accessToken struct {
+	AccessToken string `json:"access_token"`
 }
 
 func handleLogin(res http.ResponseWriter, req *http.Request) {
@@ -57,9 +61,26 @@ func validPassword(loginPass string, userPass string) bool {
 	return same
 }
 
-func signToken(user pgdb.User) string {
-	token := fmt.Sprintf("user %v", user)
-	return token
+func signToken(user pgdb.TotUser) (string, error) {
+	var claims token.CustomClaims
+	userClaims := token.UserClaims{
+		ID:        user.ID,
+		Roles:     user.Roles,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		Email:     user.Email,
+	}
+
+	claims.SetData(userClaims)
+	log.Println("claims...", claims)
+
+	jwt, err := token.Sign(claims)
+	if err != nil {
+		return "", err
+	}
+	return jwt, nil
+	// token := fmt.Sprintf("user %v", u)
+	// return token
 }
 
 func loginUser(req *http.Request, res http.ResponseWriter) {
@@ -83,8 +104,17 @@ func loginUser(req *http.Request, res http.ResponseWriter) {
 	}
 
 	if validPassword(cred.Password, user.Password) == true {
-		data = SetOKResponse(user)
-		// data = SetOKResponse(signToken(user))
+		token, err := signToken(user)
+		if err != nil {
+			data.Status = http.StatusInternalServerError
+			data.StatusText = "Internal Server Error"
+			data.Payload = "Failed to authenticate"
+		} else {
+			at := accessToken{
+				AccessToken: token,
+			}
+			data = SetOKResponse(at)
+		}
 	} else {
 		data.Status = http.StatusForbidden
 		data.StatusText = "Forbidden"
