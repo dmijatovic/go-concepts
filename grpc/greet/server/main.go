@@ -1,14 +1,31 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"net"
 
-	greetpb "./pb"
+	greetpb "../pb"
 	"google.golang.org/grpc"
 )
 
 type grpcSrv struct{}
+
+// implement Greet interface from greetpb to our grpcSrv
+func (*grpcSrv) Greet(ctx context.Context, req *greetpb.GreetRequest) (*greetpb.GreetResponse, error) {
+	log.Println("Greet server received request...", req)
+	// get firstName from GreetRequest struct
+	firstName := req.Greeting.GetFirstName()
+	lastName := req.Greeting.GetLastName()
+	// construct reponse
+	msg := fmt.Sprintf("Hello %v %v!", firstName, lastName)
+	// construct response
+	resp := &greetpb.GreetResponse{
+		Result: msg,
+	}
+	return resp, nil
+}
 
 func main() {
 	println("Server works!")

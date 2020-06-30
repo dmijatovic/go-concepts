@@ -92,6 +92,8 @@ log.Fatalf("Failed to serve greetpb: %v", err)
 
 ```
 
+The server needs to implement service interface defined in the protobuf generate file. In our first example the service interface is defined in GreetServiceServer.
+
 ## Creating gRPC client (consumer)
 
 This client will connect to gRPC server. THe basic boilerplate is in client folder. Basic bits are
