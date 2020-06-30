@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 
+	"../password"
 	"../pgdb"
 )
 
@@ -52,15 +53,8 @@ func getCredentialsFromBody(req *http.Request, res http.ResponseWriter) (LoginCr
 }
 
 func validPassword(loginPass string, userPass string) bool {
-
-	log.Println(loginPass)
-	log.Println(userPass)
-
-	if loginPass == userPass {
-		return true
-	} else {
-		return false
-	}
+	same := password.Validate(loginPass, userPass)
+	return same
 }
 
 func signToken(user pgdb.User) string {

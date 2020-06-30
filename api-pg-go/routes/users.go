@@ -50,9 +50,9 @@ func getAllUsers(res http.ResponseWriter) {
 	data.ReturnResponse(res)
 }
 
-func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (pgdb.User, error) {
+func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (pgdb.InputUser, error) {
 	var data Response
-	var user pgdb.User
+	var user pgdb.InputUser
 	//extract data from request body
 	err := json.NewDecoder(req.Body).Decode(&user)
 	if err != nil {
@@ -71,13 +71,13 @@ func getUserFromReqBody(req *http.Request, res http.ResponseWriter) (pgdb.User, 
 func addNewUser(req *http.Request, res http.ResponseWriter) {
 	var data Response
 	// extract user from body
-	user, err := getUserFromReqBody(req, res)
+	input, err := getUserFromReqBody(req, res)
 	if err != nil {
 		//exit on error
 		return
 	}
 	// call insert statement
-	id, err := pgdb.AddNewUser(user)
+	user, err := pgdb.AddNewUser(input)
 	// check if insert failed
 	if err != nil {
 		data = SetErrorResponse(err, ServerStatus{
@@ -85,7 +85,6 @@ func addNewUser(req *http.Request, res http.ResponseWriter) {
 			StatusText: "Failed to extract data from request.Body",
 		})
 	} else {
-		user.ID = id
 		data = SetOKResponse(user)
 	}
 	//write reponse

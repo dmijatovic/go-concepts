@@ -7,14 +7,28 @@ The intention is to create simple api with less as possible dependencies, so we 
 - basic go database module and postgres driver
 - basic go http router (defaul mux)
 - encode/json for json marshaling
+- bcrypt module for password hashing
 
 ## Module stucture
 
 There are some ideas about MVC structure but I am inclined using a custom structure:
 
-- pgdb: module responsible for postgres database connection
-- model: for data types/models. The user model contains direct connection to pgdb currently. Im am considering interface implementation for loose coupling?
+- hash: module resposible for hashing the passwords. bcrypt is used.
+- pgdb: module responsible for postgres database connection and models
 - routes module: container routes and calls appropriate method in models
+- views: static index.html page for root of the api
+
+## Dependencies
+
+This modules need to be installed if you do not have them already
+
+```bash
+# pg driver
+go get github.com/lib/pq
+# bcrypt
+go get golang.org/x/crypto/bcrypt
+
+```
 
 ## Go quirks
 
