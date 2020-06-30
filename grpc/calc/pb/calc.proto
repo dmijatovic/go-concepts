@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package calc;
+option go_package="pb;calc";
+
+message CalcRequest{
+  int32 num_1 = 1;
+  int32 num_2 = 2;
+  string operation = 3;
+}
+
+message CalcResponse{
+  int64 result = 1;
+}
+
+service CalcService{
+  rpc Add(CalcRequest) returns (CalcResponse){};
+  rpc Subtract(CalcRequest) returns (CalcResponse){};
+  rpc Multiply(CalcRequest) returns (CalcResponse){};
+  rpc Divide(CalcRequest) returns (CalcResponse){};
+}
