@@ -60,6 +60,9 @@ func myKey(token *jwt.Token) (interface{}, error) {
 // Verify will check if token is valid and return true/false and error message
 func Verify(tokenStr string) (bool, string) {
 	token, err := jwt.Parse(tokenStr, myKey)
+	if err != nil {
+		return false, "Invalid token"
+	}
 	if token.Valid {
 		return true, "Valid token"
 	}

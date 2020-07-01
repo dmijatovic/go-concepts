@@ -1,6 +1,6 @@
-# aAuth2 Authorisation Server in Go
+# oAuth2 Authorisation Server in Go
 
-This demo project uses basis Go database/sql module and official pg driver for postgres.
+This demo project uses basis Go database/sql module and official pg driver for postgres and users storage. It supports basic CRUD operations on users.
 
 The intention is to create simple api with less as possible dependencies, so we use:
 
@@ -78,7 +78,7 @@ First version of compiled app was about 9MB size.
 ```bash
 
 # build go app
-go build -o=oauth2-api
+go build -o=goauth2
 
 # build Dockerfile
 docker build . -t dv4all/goauth:v0.1
@@ -87,4 +87,18 @@ docker build . -t dv4all/goauth:v0.1
 
 ### Go modules
 
-Building Go app did not work properly in Docker. Third party libraries were not found.
+Building Go app did not work properly in Docker. Third party libraries were not found. I needed to create module app.
+
+In generall module names use refrence to github repo something like this:
+**github.com/dmijatovic/go-concepts/oauth2-api**. In this example I simply used shorter name to see is there any problems/difference?!?
+
+I then runned `go mod tidy` which added dependecies used in the scripts into my go.mod definition file.
+
+```bash
+# intialize module
+go mod init dv4all/goauth2
+
+# update 3rd party dependecies
+# this will add/remove dependencies of the module
+go mod tidy
+```

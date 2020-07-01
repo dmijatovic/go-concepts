@@ -43,7 +43,7 @@ go get github.com/dgrijalva/jwt-go/v4
 
 ## Dockerfile
 
-Building module app with Docker. This seem to work properly.
+Building module app with Docker. This seem to work properly with 3rd parties
 
 ```bash
 # build container

@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"dv4all/goauth2/logger"
 	"net/http"
 )
 
@@ -11,14 +12,14 @@ func Register() *http.ServeMux {
 	// demo page does do much
 	mux.HandleFunc("/demo", demo())
 	// users management page GET,POST,PUT, DELETE
-	mux.HandleFunc("/users", handleUsers)
+	mux.Handle("/users", logger.LogHFunc(handleUsers))
 	// login issues JWT tokens
-	mux.HandleFunc("/login", handleLogin)
+	mux.Handle("/login", logger.LogHFunc(handleLogin))
 	// verify user token
-	mux.HandleFunc("/verify", handleVerify)
+	mux.Handle("/verify", logger.LogHFunc(handleVerify))
 
 	//home page is static index.html
-	mux.Handle("/", http.FileServer(http.Dir("./views/")))
+	mux.Handle("/", logger.LogHandler(http.FileServer(http.Dir("./views/"))))
 
 	return mux
 }
@@ -27,9 +28,3 @@ func home(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 	w.Write([]byte("API Home page"))
 }
-
-// func jsonHeader(res http.ResponseWriter) http.ResponseWriter {
-// 	res.WriteHeader(http.StatusOK)
-// 	res.Header().Set("Content-Type", "application/json")
-// 	return res
-// }

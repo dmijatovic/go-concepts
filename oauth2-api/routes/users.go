@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"../pgdb"
+	"dv4all/goauth2/pgdb"
 )
 
 func users() http.HandlerFunc {

@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"../password"
+	"dv4all/goauth2/password"
 )
 
 //BaseUser contains basic user properties

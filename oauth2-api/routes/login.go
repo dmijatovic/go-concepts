@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
-	"../password"
-	"../pgdb"
-	"../token"
+	"dv4all/goauth2/password"
+	"dv4all/goauth2/pgdb"
+	"dv4all/goauth2/token"
 )
 
 // LoginCredentials of user

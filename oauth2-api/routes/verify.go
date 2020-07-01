@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"../token"
+	"dv4all/goauth2/token"
 )
 
 func handleVerify(res http.ResponseWriter, req *http.Request) {
