@@ -1,4 +1,4 @@
-# Basic api demo with GO and Postgres
+# aAuth2 Authorisation Server in Go
 
 This demo project uses basis Go database/sql module and official pg driver for postgres.
 
@@ -15,6 +15,7 @@ There are some ideas about MVC structure but I am inclined using a custom struct
 
 - password: module resposible for hashing the passwords. bcrypt is used.
 - pgdb: module responsible for postgres database connection and models
+- postgres: folder for Postgres Docker container definitions
 - routes module: container routes and calls appropriate method in models
 - token: module for signing and verifying JWT.
 - views: static index.html page for root of the api

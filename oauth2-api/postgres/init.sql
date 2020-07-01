@@ -11,12 +11,17 @@ CREATE TABLE users (
     roles character varying(100) NOT NULL,
     first_name character varying(100) NOT NULL,
     last_name character varying(100) NOT NULL,
-    email character varying(100) NOT NULL,
-    password character varying(255) NOT NULL,
+    email character varying(100) NOT NULL CHECK (length(email)>5),
+    password character varying(255) NOT NULL CHECK (length(password)>5),
     birth_date date NOT NULL,
     createdate date DEFAULT CURRENT_DATE NOT NULL,
     PRIMARY KEY (email)
 );
+
+-- ADD CONSTRATINTS AFTER TABLE CREATED
+-- ALTER TABLE users
+--     add constraint min_len_password check (length(password) > 5);
+--     add constraint min_len_email check (length(password) > 5);
 
 -- ******************
 -- IMPORT DATA
