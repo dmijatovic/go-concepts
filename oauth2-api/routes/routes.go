@@ -2,6 +2,7 @@ package routes
 
 import (
 	"dv4all/goauth2/logger"
+	"dv4all/goauth2/token"
 	"net/http"
 )
 
@@ -12,7 +13,7 @@ func Register() *http.ServeMux {
 	// demo page does do much
 	mux.HandleFunc("/demo", demo())
 	// users management page GET,POST,PUT, DELETE
-	mux.Handle("/users", logger.LogHFunc(handleUsers))
+	mux.Handle("/users", logger.LogHandler(token.ProtectHFunc(handleUsers)))
 	// login issues JWT tokens
 	mux.Handle("/login", logger.LogHFunc(handleLogin))
 	// verify user token

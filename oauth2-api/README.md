@@ -9,10 +9,27 @@ The intention is to create simple api with less as possible dependencies, so we 
 - encode/json for json marshaling
 - bcrypt module for password hashing
 
+This results in the images with minimal footprint:
+
+- goauth2 server image is ca. 15MB
+- postgres uses alpine image with footprint of 157MB
+
+I did [similair approach with NodeJS](https://github.com/dmijatovic/ts-polka-oauth) using Polka web server and PotsgreSQL. The footpring of NodeJS solution is larger. The minimum image size I achived is 40MB for web server. In the NodeJS solution I also used NGINX as reverse proxy and potentialy as SSL provider. For Go it seems that all can be implemented withing Go which I attend to do later :-).
+
+## Usage
+
+This server can be used via docker-compose file.
+
+`docker-compose up -d` to run server on localhost:8080 in detached mode.
+`docker-compose down` to stop the service.
+
+For more information about the setup and the project itself see the rest of README.
+
 ## Module stucture
 
 There are some ideas about MVC structure but I am inclined using a custom structure:
 
+- logger: basic logger middleware to log request
 - password: module resposible for hashing the passwords. bcrypt is used.
 - pgdb: module responsible for postgres database connection and models
 - postgres: folder for Postgres Docker container definitions

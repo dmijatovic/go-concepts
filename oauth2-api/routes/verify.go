@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"dv4all/goauth2/response"
 	"dv4all/goauth2/token"
 )
 
@@ -19,7 +20,7 @@ func handleVerify(res http.ResponseWriter, req *http.Request) {
 		verifyUser(req, res)
 	default:
 		log.Printf("METHOD NOT SUPPORTED...%v", upperMethod)
-		var data Response
+		var data response.Response
 		data.Status = http.StatusBadRequest
 		data.StatusText = "Method not supported"
 		data.Payload = "Method not supported"
@@ -28,19 +29,7 @@ func handleVerify(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func getTokenFromAuthHeader(req *http.Request) (string, error) {
-	ah := req.Header.Get("Authorization")
-	token := strings.Split(ah, " ")
-	if len(token) == 2 {
-		if strings.ToLower(token[0]) != "bearer" {
-			return "", errors.New("Authorization header Bearer token missing")
-		}
-		return token[1], nil
-	}
-	return "", errors.New("Authorization header Bearer missing")
-}
-
-func verifyToken(tokenStr string) Response {
+func verifyToken(tokenStr string) response.Response {
 	valid, err := token.Verify(tokenStr)
 	if valid == true {
 		var r = struct {
@@ -50,9 +39,9 @@ func verifyToken(tokenStr string) Response {
 			AccessToken: tokenStr,
 			TokenStatus: err,
 		}
-		return SetOKResponse(r)
+		return response.SetOKResponse(r)
 	}
-	return SetErrorResponse(errors.New(err), ServerStatus{
+	return response.SetErrorResponse(errors.New(err), response.ServerStatus{
 		Status:     http.StatusForbidden,
 		StatusText: err,
 	})
@@ -60,9 +49,9 @@ func verifyToken(tokenStr string) Response {
 
 func verifyUser(req *http.Request, res http.ResponseWriter) {
 	// var data Response
-	tokenStr, err := getTokenFromAuthHeader(req)
+	tokenStr, err := token.GetTokenFromAuthHeader(req)
 	if err != nil {
-		data := SetErrorResponse(err, ServerStatus{
+		data := response.SetErrorResponse(err, response.ServerStatus{
 			Status:     http.StatusForbidden,
 			StatusText: "Forbidden",
 		})

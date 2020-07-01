@@ -9,9 +9,10 @@ import (
 func createLogEntry(r *http.Request) {
 	// new string builder
 	msg := strings.Builder{}
-	msg.WriteString(r.Method)
-	msg.WriteString("...")
 	msg.WriteString(r.URL.Path)
+	msg.WriteString("...")
+	msg.WriteString(r.Method)
+
 	//log request
 	log.Println(msg.String())
 }

@@ -8,6 +8,7 @@ import (
 
 	"dv4all/goauth2/password"
 	"dv4all/goauth2/pgdb"
+	"dv4all/goauth2/response"
 	"dv4all/goauth2/token"
 )
 
@@ -29,7 +30,7 @@ func handleLogin(res http.ResponseWriter, req *http.Request) {
 		loginUser(req, res)
 	default:
 		log.Printf("METHOD NOT SUPPORTED...%v", upperMethod)
-		var data Response
+		var data response.Response
 		data.Status = http.StatusBadRequest
 		data.StatusText = "Method not supported"
 		data.Payload = "Method not supported"
@@ -39,13 +40,13 @@ func handleLogin(res http.ResponseWriter, req *http.Request) {
 }
 
 func getCredentialsFromBody(req *http.Request, res http.ResponseWriter) (LoginCredentials, error) {
-	var data Response
+	var data response.Response
 	var cred LoginCredentials
 
 	err := json.NewDecoder(req.Body).Decode(&cred)
 	if err != nil {
 		log.Println("getUserFromReqBody: ", err)
-		data = SetErrorResponse(err, ServerStatus{
+		data = response.SetErrorResponse(err, response.ServerStatus{
 			Status:     http.StatusBadRequest,
 			StatusText: "Failed to extract data from request.Body",
 		})
@@ -84,18 +85,18 @@ func signToken(user pgdb.TotUser) (string, error) {
 }
 
 func loginUser(req *http.Request, res http.ResponseWriter) {
-	var data Response
+	var data response.Response
 
 	cred, err := getCredentialsFromBody(req, res)
 	if err != nil {
 		return
 	}
 
-	data = SetOKResponse(cred)
+	data = response.SetOKResponse(cred)
 
 	user, err := pgdb.GetUserByEmail(cred.Email)
 	if err != nil {
-		data = SetErrorResponse(err, ServerStatus{
+		data = response.SetErrorResponse(err, response.ServerStatus{
 			Status:     http.StatusForbidden,
 			StatusText: "User email or password incorrect",
 		})
@@ -113,7 +114,7 @@ func loginUser(req *http.Request, res http.ResponseWriter) {
 			at := accessToken{
 				AccessToken: token,
 			}
-			data = SetOKResponse(at)
+			data = response.SetOKResponse(at)
 		}
 	} else {
 		data.Status = http.StatusForbidden

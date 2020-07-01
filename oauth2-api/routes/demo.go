@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"dv4all/goauth2/response"
 	"net/http"
 )
 
@@ -9,6 +10,6 @@ func demo() http.HandlerFunc {
 }
 
 func handleDemo(res http.ResponseWriter, req *http.Request) {
-	data := SetOKResponse("This is demo response")
+	data := response.SetOKResponse("This is demo response")
 	data.ReturnResponse(res)
 }
