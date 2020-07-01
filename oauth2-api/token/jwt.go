@@ -1,12 +1,13 @@
 package token
 
 import (
-	"log"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
 var privateKey = []byte("ThisISMyPivateTestSigningKey12312312")
+var expTime time.Duration = 60 * time.Second
 
 // UserClaims to be included in the JWT.
 type UserClaims struct {
@@ -23,13 +24,18 @@ type CustomClaims struct {
 	jwt.StandardClaims
 }
 
-// SetData for CustomClaims
+// SetData for CustomClaims and Standard JWT claims
 func (cc *CustomClaims) SetData(d UserClaims) {
+	//custom user profile claims
 	cc.Profile = d
+	// default jwt claims
 	cc.Audience = d.Roles
-	cc.ExpiresAt = 60 * 60
 	cc.Id = d.ID
-	// cc.IssuedAt = time.Time.MarshalJSON
+	cc.IssuedAt = time.Now().Unix()
+	//calculate expiration time
+	cc.ExpiresAt = time.Now().Add(expTime).Unix()
+	cc.Issuer = "dv4all-oauth2-go-service"
+	cc.Subject = d.FirstName + " " + d.LastName
 }
 
 // Sign will create new token for valid user
@@ -37,14 +43,7 @@ func (cc *CustomClaims) SetData(d UserClaims) {
 // The data will be included in the token.
 // DO NOT SEND secrity related information (like password) in the data
 func Sign(claims CustomClaims) (string, error) {
-
-	// var claims claimsType
-	// // claims.data = data
-	// claims.Audience = data.Roles
-	// claims.ExpiresAt = 60 * 60
-	// claims.Issuer = "dv4all"
-
-	log.Println("clams...", claims)
+	// log.Println("clams...", claims)
 
 	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := newToken.SignedString(privateKey)

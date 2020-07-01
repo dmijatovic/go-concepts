@@ -8,10 +8,17 @@ import (
 func Register() *http.ServeMux {
 	mux := http.NewServeMux()
 
-	mux.Handle("/", http.FileServer(http.Dir("./views/")))
+	// demo page does do much
 	mux.HandleFunc("/demo", demo())
+	// users management page GET,POST,PUT, DELETE
 	mux.HandleFunc("/users", handleUsers)
+	// login issues JWT tokens
 	mux.HandleFunc("/login", handleLogin)
+	// verify user token
+	mux.HandleFunc("/verify", handleVerify)
+
+	//home page is static index.html
+	mux.Handle("/", http.FileServer(http.Dir("./views/")))
 
 	return mux
 }
@@ -21,8 +28,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("API Home page"))
 }
 
-func jsonHeader(resp http.ResponseWriter) http.ResponseWriter {
-	resp.WriteHeader(http.StatusOK)
-	resp.Header().Set("Content-Type", "application/json")
-	return resp
-}
+// func jsonHeader(res http.ResponseWriter) http.ResponseWriter {
+// 	res.WriteHeader(http.StatusOK)
+// 	res.Header().Set("Content-Type", "application/json")
+// 	return res
+// }

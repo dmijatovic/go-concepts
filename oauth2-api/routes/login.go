@@ -72,7 +72,7 @@ func signToken(user pgdb.TotUser) (string, error) {
 	}
 
 	claims.SetData(userClaims)
-	log.Println("claims...", claims)
+	// log.Println("claims...", claims)
 
 	jwt, err := token.Sign(claims)
 	if err != nil {
