@@ -68,3 +68,23 @@ func (r *Response) ReturnResponse(rw http.ResponseWriter) {
  json.NewEncoder(rw).Encode(r)
 }
 ```
+
+## Deployment
+
+We deploy using Docker and docker-compose. Go app is build using Dockerfile in the root of the app. We build oauth2-api executable in the container using golang-alpine image. We run app in the apline container. Potgres is also runned in apline container.
+
+First version of compiled app was about 9MB size.
+
+```bash
+
+# build go app
+go build -o=oauth2-api
+
+# build Dockerfile
+docker build . -t dv4all/goauth:v0.1
+
+```
+
+### Go modules
+
+Building Go app did not work properly in Docker. Third party libraries were not found.
