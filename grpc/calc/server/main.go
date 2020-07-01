@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 	"log"
 	"net"
 
@@ -82,6 +83,31 @@ func (*calcSvc) Divide(ctx context.Context, req *calc.CalcRequest) (*calc.CalcRe
 	}
 
 	return res, nil
+}
+
+// Receive a stream of numbers from the client and return average
+func (*calcSvc) Average(stream calc.CalcService_AverageServer) error {
+	var sum int32 = 0
+	var mean float64 = 0
+	var cnt int32 = 0
+
+	log.Println("Average channel stram started...")
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			log.Println("Received end of stream")
+			mean = float64(sum / cnt)
+			return stream.SendAndClose(&calc.AverageResponse{
+				Mean: mean,
+			})
+		}
+		if err != nil {
+			log.Panicln("Stream error:", err)
+		}
+		sum += req.GetNum()
+		cnt++
+	}
 }
 
 func logError(e error) {

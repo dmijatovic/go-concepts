@@ -111,3 +111,66 @@ c := greetpb.NewGreetServiceClient(cnn)
 log.Println("Client registered: ", c)
 
 ```
+
+## gRPC Streaming
+
+The stream can be asymetric. The setup on steaming client and server receiver. For exact implementation see calc folder implementation of Average rpc channel.
+
+Sender implementation, see client/main.go
+
+```go
+// stream sender
+// This will stram numbers to server one by one
+func makeAverageRequest(nums []int32) float64 {
+  stream, err := calcClient.Average(context.Background())
+  if err != nil {
+    log.Panicln(err)
+  }
+
+  for _, num := range nums {
+    msg := calc.AverageRequest{
+    Num: num,
+    }
+    //send a value to a server?!?
+    stream.Send(&msg)
+  }
+
+  resp, err := stream.CloseAndRecv()
+  if err != nil {
+    log.Panicln(err)
+  }
+  return resp.GetMean()
+}
+
+```
+
+Stream receiver implementation (in this case serever), see server/main.go
+
+```Go
+
+// Receive a stream of numbers from the client and return average
+func (*calcSvc) Average(stream calc.CalcService_AverageServer) error {
+  var sum int32 = 0
+  var mean float64 = 0
+  var cnt int32 = 0
+
+  log.Println("Average channel stram started...")
+
+  for {
+    req, err := stream.Recv()
+    if err == io.EOF {
+    log.Println("Received end of stream")
+    mean = float64(sum / cnt)
+    return stream.SendAndClose(&calc.AverageResponse{
+      Mean: mean,
+    })
+    }
+    if err != nil {
+    log.Panicln("Stream error:", err)
+    }
+    sum += req.GetNum()
+    cnt++
+  }
+}
+
+```

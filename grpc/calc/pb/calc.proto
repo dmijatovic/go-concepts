@@ -13,9 +13,20 @@ message CalcResponse{
   int64 result = 1;
 }
 
+message AverageRequest{
+  int32 num = 1;
+}
+
+message AverageResponse{
+  double mean = 1;
+}
+
 service CalcService{
   rpc Add(CalcRequest) returns (CalcResponse){};
   rpc Subtract(CalcRequest) returns (CalcResponse){};
   rpc Multiply(CalcRequest) returns (CalcResponse){};
   rpc Divide(CalcRequest) returns (CalcResponse){};
+  
+  // client side stream
+  rpc Average(stream AverageRequest) returns (AverageResponse);
 }
