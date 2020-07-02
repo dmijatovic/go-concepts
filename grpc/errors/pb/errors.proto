@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package errors;
+option go_package="pb;errors";
+
+message Request{
+  string type = 1;
+  string payload = 2;
+}
+
+message Response{
+  string result = 1;
+}
+
+service Errors{
+  // bi-directional streams
+  rpc Task(Request) returns (Response);
+}
