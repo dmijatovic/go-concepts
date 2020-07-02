@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package duplex;
+option go_package="pb;duplex";
+
+message Request{
+  string type = 1;
+  string payload =2;
+}
+
+message Response{
+  string result = 1;
+}
+
+service ChatService{
+  // bi-directional streams
+  rpc Chat(stream Request) returns (stream Response);
+}

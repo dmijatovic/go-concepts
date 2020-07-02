@@ -174,3 +174,21 @@ func (*calcSvc) Average(stream calc.CalcService_AverageServer) error {
 }
 
 ```
+
+## gRPC Error codes
+
+There only handful err codes used by gRPC protocol. The list is [avaliable here](https://grpc.io/docs/guides/error.html)
+
+To add more info to error you can use error context.
+
+There is extended [guide for handling errors in gRPC here](https://grpc.io/docs/guides/error.html).
+
+There is also example implementation at [this website](https://avi.im/grpc-errors/).
+
+## gRPC Deadlines
+
+Each call should have a deadline defined. The server then checks if dedaline is exceeded and cancel all work.
+
+More information about [defining dedalines can be found in this blog](https://grpc.io/blog/deadlines).
+
+The deadlines are propagated through gRPC calls, for example if A defines deadline, all receivers in the chain will know that.
