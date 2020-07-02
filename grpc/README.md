@@ -192,3 +192,15 @@ Each call should have a deadline defined. The server then checks if dedaline is 
 More information about [defining dedalines can be found in this blog](https://grpc.io/blog/deadlines).
 
 The deadlines are propagated through gRPC calls, for example if A defines deadline, all receivers in the chain will know that.
+
+## SSL encription
+
+gRPC supports SSL encription out of the box. The communication between server and client should be encripted.
+
+In the ssl folder you will find a demo using TLS with self-signed certificates and the instructions in README file.
+
+## gRPC reflection
+
+In order to expose gRPC api tou can use reflection module . For more information look at [reflection github repo](https://github.com/grpc/grpc-go/tree/master/reflection).
+
+To be able to introggate gRPC server you need a cli. A popular one is [Evans CLI](https://github.com/ktr0731/evans).
