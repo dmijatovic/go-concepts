@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package deadline;
+option go_package="pb;deadline";
+
+message Request{
+  string type = 1;
+  string payload = 2;
+}
+
+message Response{
+  string result = 1;
+}
+
+service WithDeadline{
+  // bi-directional streams
+  rpc Task(Request) returns (Response);
+}
