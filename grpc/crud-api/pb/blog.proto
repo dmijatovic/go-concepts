@@ -1,7 +1,12 @@
 syntax = "proto3";
 
-package blog;
+package blog.pb;
 option go_package="pb;blog";
+
+
+service BlogSvc{
+  rpc Create (Blog) returns (Response);
+}
 
 message Blog{
   string id = 1;
@@ -10,6 +15,9 @@ message Blog{
   string content = 4;
 }
 
-service BlogSvc{
-  
+message Response{
+  int32 status = 1;
+  string statusText = 2;
+  bytes payload = 3;
 }
+

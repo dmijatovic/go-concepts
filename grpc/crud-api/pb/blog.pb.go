@@ -10,6 +10,8 @@ import (
 	context "context"
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -98,6 +100,69 @@ func (x *Blog) GetContent() string {
 	return ""
 }
 
+type Response struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Status     int32  `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	StatusText string `protobuf:"bytes,2,opt,name=statusText,proto3" json:"statusText,omitempty"`
+	Payload    []byte `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`
+}
+
+func (x *Response) Reset() {
+	*x = Response{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_blog_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Response) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Response) ProtoMessage() {}
+
+func (x *Response) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_blog_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Response.ProtoReflect.Descriptor instead.
+func (*Response) Descriptor() ([]byte, []int) {
+	return file_pb_blog_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Response) GetStatus() int32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *Response) GetStatusText() string {
+	if x != nil {
+		return x.StatusText
+	}
+	return ""
+}
+
+func (x *Response) GetPayload() []byte {
+	if x != nil {
+		return x.Payload
+	}
+	return nil
+}
+
 var File_pb_blog_proto protoreflect.FileDescriptor
 
 var file_pb_blog_proto_rawDesc = []byte{
@@ -108,9 +173,17 @@ var file_pb_blog_proto_rawDesc = []byte{
 	0x52, 0x08, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x69,
 	0x74, 0x6c, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65,
 	0x12, 0x18, 0x0a, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x04, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x32, 0x09, 0x0a, 0x07, 0x42, 0x6c,
-	0x6f, 0x67, 0x53, 0x76, 0x63, 0x42, 0x09, 0x5a, 0x07, 0x70, 0x62, 0x3b, 0x62, 0x6c, 0x6f, 0x67,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x09, 0x52, 0x07, 0x63, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x22, 0x5c, 0x0a, 0x08, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1e,
+	0x0a, 0x0a, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x54, 0x65, 0x78, 0x74, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0a, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x54, 0x65, 0x78, 0x74, 0x12, 0x18,
+	0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52,
+	0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x32, 0x2f, 0x0a, 0x07, 0x42, 0x6c, 0x6f, 0x67,
+	0x53, 0x76, 0x63, 0x12, 0x24, 0x0a, 0x06, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x12, 0x0a, 0x2e,
+	0x62, 0x6c, 0x6f, 0x67, 0x2e, 0x42, 0x6c, 0x6f, 0x67, 0x1a, 0x0e, 0x2e, 0x62, 0x6c, 0x6f, 0x67,
+	0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x09, 0x5a, 0x07, 0x70, 0x62, 0x3b,
+	0x62, 0x6c, 0x6f, 0x67, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -125,13 +198,16 @@ func file_pb_blog_proto_rawDescGZIP() []byte {
 	return file_pb_blog_proto_rawDescData
 }
 
-var file_pb_blog_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_pb_blog_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_pb_blog_proto_goTypes = []interface{}{
-	(*Blog)(nil), // 0: blog.Blog
+	(*Blog)(nil),     // 0: blog.Blog
+	(*Response)(nil), // 1: blog.Response
 }
 var file_pb_blog_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
+	0, // 0: blog.BlogSvc.Create:input_type -> blog.Blog
+	1, // 1: blog.BlogSvc.Create:output_type -> blog.Response
+	1, // [1:2] is the sub-list for method output_type
+	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -155,6 +231,18 @@ func file_pb_blog_proto_init() {
 				return nil
 			}
 		}
+		file_pb_blog_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Response); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -162,7 +250,7 @@ func file_pb_blog_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_pb_blog_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -188,6 +276,7 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type BlogSvcClient interface {
+	Create(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*Response, error)
 }
 
 type blogSvcClient struct {
@@ -198,22 +287,59 @@ func NewBlogSvcClient(cc grpc.ClientConnInterface) BlogSvcClient {
 	return &blogSvcClient{cc}
 }
 
+func (c *blogSvcClient) Create(ctx context.Context, in *Blog, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/blog.BlogSvc/Create", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BlogSvcServer is the server API for BlogSvc service.
 type BlogSvcServer interface {
+	Create(context.Context, *Blog) (*Response, error)
 }
 
 // UnimplementedBlogSvcServer can be embedded to have forward compatible implementations.
 type UnimplementedBlogSvcServer struct {
 }
 
+func (*UnimplementedBlogSvcServer) Create(context.Context, *Blog) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+
 func RegisterBlogSvcServer(s *grpc.Server, srv BlogSvcServer) {
 	s.RegisterService(&_BlogSvc_serviceDesc, srv)
+}
+
+func _BlogSvc_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Blog)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlogSvcServer).Create(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/blog.BlogSvc/Create",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlogSvcServer).Create(ctx, req.(*Blog))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _BlogSvc_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "blog.BlogSvc",
 	HandlerType: (*BlogSvcServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "pb/blog.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _BlogSvc_Create_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "pb/blog.proto",
 }
