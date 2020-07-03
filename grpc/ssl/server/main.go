@@ -22,8 +22,8 @@ type actionStruct struct {
 }
 
 var host string = "0.0.0.0:50051"
-var certFile string = "/home/dusan/test/go/grpc/ssl/cert/server.crt"
-var keyFile string = "/home/dusan/test/go/grpc/ssl/cert/server.pem"
+var certFile string = "/home/dusan/test/go/concepts/grpc/ssl/cert/server.crt"
+var keyFile string = "/home/dusan/test/go/concepts/grpc/ssl/cert/server.pem"
 
 func (*grpcSrv) Task(ctx context.Context, req *deadline.Request) (*deadline.Response, error) {
 	// we will wait for 3 seconds and check for
