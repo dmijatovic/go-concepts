@@ -21,3 +21,18 @@ Adapter pattern is simply making coversion between two different interfaces. In 
 ## Prototype
 
 The idea of prototype is to reuse specific structure and just change few props. But because we can work with pointers, and in some situation specific variables types are passed by refference by default we might experience some troubles. To be sure that we copy values instead of pointer DeepCopy is required. In the prototype folder example of DeepCopy is shown.
+
+## Singleton
+
+The pattern ensures that only ONE instance of the struct is present in the application. These are specific cases, one example could be database connection (generally you would like to use one database for all data). It seems that some experts are not in favour of creating singletons.
+
+To achieve single instance of an struct we do not expose struct to consumer and we use sync.Once method which ensures that some method is called only once.
+For more details see singleton folder.
+
+## Composite (Graphs)
+
+This sections models sort of graph structure. The idea is that structure can have children of its own type recursively. This makes possible to have objects of unlimited depth. The object can be traversed recursively. In the example we model simple neuron mimicing some sort of neural network.
+
+## Decorator
+
+Augment an object with additional functionality. And you want to keep functionality separate.
