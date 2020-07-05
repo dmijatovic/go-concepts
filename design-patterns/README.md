@@ -12,6 +12,12 @@ This is function that creates instance of object/struct. The factory function is
 
 The functional approach of the factory is well known `currying` approach that returns a function that will return struct.
 
+Few variations are implemented in the factory folder. The main point is felxibility during creation of new struct object. In real life these structures will usually be more complex.
+
 ## Adapter
 
 Adapter pattern is simply making coversion between two different interfaces. In the training example vector image is converted to bimap by adapter interface. I did simpler example of converting Fahrenheid to Celsius. Important point for adapters using lot of data and processing can be caching. Simple example also demonstrates caching although in that example is abit overkill.
+
+## Prototype
+
+The idea of prototype is to reuse specific structure and just change few props. But because we can work with pointers, and in some situation specific variables types are passed by refference by default we might experience some troubles. To be sure that we copy values instead of pointer DeepCopy is required. In the prototype folder example of DeepCopy is shown.
