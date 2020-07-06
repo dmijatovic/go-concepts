@@ -7,10 +7,21 @@ This repo contains [Golang training from Udemy].
 Download installation from [go website](https://golang.org/doc/install?download=go1.14.4.linux-amd64.tar.gz)
 Follow the instructions from the website to install Go on Linux.
 
+`REMARK: update your .local file to include GOPATH and GOROOT like this`
+
+```bash
+# .profile file add GOPATH variabless
+# SIMPLE VERSION
+# GOROOT
+export PATH=$PATH:/usr/local/go/bin
+# PATH
+export PATH=$PATH:$HOME/go/bin
+```
+
 ### Plugins for Visual Studio Code
 
 For proper use with Visual Studio Code you are adviced to install Go plugin. After that you need to install following.
-Create *.go file. Visual Studio Code will popup warning that some tools are missing. Select Install All to install all go tools.
+Create \*.go file. Visual Studio Code will popup warning that some tools are missing. Select Install All to install all go tools.
 
 ## Golang remarks
 
@@ -253,7 +264,7 @@ Go uses seed when randomizing values. This is order to be able to repeat randomi
 
 ## Testing with go
 
-Go has builtin test suite. The test files should have name *_test.go.
+Go has builtin test suite. The test files should have name \*\_test.go.
 The function names should have Test at the beginning of the func name and original func name integrated.
 Each test function gets a test handler as first parameter of test fn.
 To run test use `go test` command.
@@ -362,8 +373,8 @@ Go passes parameters into func by value not by reference. This means that functi
 
 ### Pointers in Go
 
-Two commands are used for working with pointers `&` and `*`. This two signs work in conjuction. First & is used to get memory address (pointer) and second *is used to extract.
-In the function signiture we also* to indicated that function requires pointer to specific variable, not the variable (value).
+Two commands are used for working with pointers `&` and `*`. This two signs work in conjuction. First & is used to get memory address (pointer) and second _is used to extract.
+In the function signiture we also_ to indicated that function requires pointer to specific variable, not the variable (value).
 
 Note! If the function signiture requires pointer to variable Go will automatically convert variable to pointer to memory without errors.
 
