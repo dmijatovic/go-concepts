@@ -21,7 +21,7 @@ func (rt Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case "/":
 		io.WriteString(w, homePage())
 	default:
-		io.WriteString(w, page404())
+		page404(w)
 	}
 }
 
@@ -33,6 +33,6 @@ func pageID(id string) string {
 	return fmt.Sprintf("This is page %v", id)
 }
 
-func page404() string {
-	return "404 - Page not found"
+func page404(rw http.ResponseWriter) {
+	http.Error(rw, "404-Page not found", http.StatusNotFound)
 }
