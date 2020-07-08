@@ -125,10 +125,12 @@ In these video Nic show how to implement [swagger](https://goswagger.io/use/spec
 
 Another online tutorial for [swagger-go can be found here](https://medium.com/@pedram.esmaeeli/generate-swagger-specification-from-go-source-code-648615f7b9d9)
 
-### Video 10: uploading files
+### Video 10&11: uploading files
 
 In the folder uploads there is a demo for accepting files upload using POST method and binary body. The image files are uploaded to storage folder.
 
 The demo handles two types of uploads. POST and MULTIPART form.
 
 For detailed implementation see uploads folder.
+
+### Video 12: gzip in Go standard lib

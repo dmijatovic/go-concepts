@@ -28,7 +28,8 @@ func (f *File) logRequest(r *http.Request) {
 	f.log.Println(r.URL.Path + "..." + r.Method)
 }
 
-func (f *File) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+//PostUpload uploads file using POST method with binary format
+func (f *File) PostUpload(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fn := vars["filename"]
 	// log request
