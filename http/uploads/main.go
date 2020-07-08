@@ -24,6 +24,7 @@ func defineRoutes(l *log.Logger) *mux.Router {
 	// file uploads: accepts only small caps
 	fu := handlers.NewFile(l)
 	router.Handle("/upload/{filename:[a-z 0-9]+\\.[a-z]{3}}", fu)
+	router.HandleFunc("/multipart", fu.MultipartUpload)
 
 	return router
 }

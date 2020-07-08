@@ -129,4 +129,6 @@ Another online tutorial for [swagger-go can be found here](https://medium.com/@p
 
 In the folder uploads there is a demo for accepting files upload using POST method and binary body. The image files are uploaded to storage folder.
 
-For detailed implementation see
+The demo handles two types of uploads. POST and MULTIPART form.
+
+For detailed implementation see uploads folder.

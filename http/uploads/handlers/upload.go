@@ -45,6 +45,24 @@ func (f *File) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	f.store.Save(fn, r.Body)
 }
 
-// func (f *File) SaveFile(filename string, rw http.ResponseWriter, req *http.Request) {
-// 	files.Save()
-// }
+//MultipartUpload handles multipart form uploads
+func (f *File) MultipartUpload(rw http.ResponseWriter, req *http.Request) {
+	err := req.ParseMultipartForm(128 * 1024)
+	if err != nil {
+		f.log.Println("Invalid multipart form")
+		http.Error(rw, "Invalid multipart form", http.StatusBadRequest)
+	}
+	// extract FromFile
+	fl, mh, e := req.FormFile("file")
+	if e != nil {
+		http.Error(rw, "Failed to retreive file from form", http.StatusBadRequest)
+	}
+	//extract file name
+	fn := mh.Filename
+	if fn != "" {
+		f.log.Println("Uploading...", fn)
+		f.store.Save(fn, fl)
+	} else {
+		http.Error(rw, "Failed to retreive Filename from form", http.StatusBadRequest)
+	}
+}
