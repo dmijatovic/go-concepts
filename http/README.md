@@ -118,3 +118,15 @@ In addition it also supports middleware functions. The middleware has next funct
 For validating posted data we can use [validator module](https://pkg.go.dev/github.com/go-playground/validator/v10?tab=doc).
 
 See video and repo for the implementation.
+
+### Video 7&8: swagger and redoc
+
+In these video Nic show how to implement [swagger](https://goswagger.io/use/spec.html) and redoc docs. Swagger and redoc modules need to be installed.
+
+Another online tutorial for [swagger-go can be found here](https://medium.com/@pedram.esmaeeli/generate-swagger-specification-from-go-source-code-648615f7b9d9)
+
+### Video 10: uploading files
+
+In the folder uploads there is a demo for accepting files upload using POST method and binary body. The image files are uploaded to storage folder.
+
+For detailed implementation see
